@@ -1,0 +1,95 @@
+Iniciando processos de benchmark da sua máquina
+Determine quantas vezes você gostaria de rodar os testes: 
+Testando o CPU:
+1. Testando apenas 1 núcleo
+Tempo de execução real    1: 0.005312 segundos
+Tempo de execução da CPU  1: 0.005225 segundos
+Tempo de execução real    2: 0.006423 segundos
+Tempo de execução da CPU  2: 0.006352 segundos
+Tempo de execução real    3: 0.005656 segundos
+Tempo de execução da CPU  3: 0.005604 segundos
+Tempo de execução real    4: 0.005338 segundos
+Tempo de execução da CPU  4: 0.005289 segundos
+Tempo de execução real    5: 0.011970 segundos
+Tempo de execução da CPU  5: 0.011862 segundos
+Tempo de execução real    6: 0.021101 segundos
+Tempo de execução da CPU  6: 0.020914 segundos
+
+2. Testando múltiplos núcleos (8 núcleos lógicos da sua máquina)
+Tempo de execução real    1: 0.003257 segundos
+Tempo de execução da CPU  1: 0.010810 segundos
+Tempo de execução real    2: 0.002578 segundos
+Tempo de execução da CPU  2: 0.002159 segundos
+Tempo de execução real    3: 0.002512 segundos
+Tempo de execução da CPU  3: 0.003280 segundos
+Tempo de execução real    4: 0.002587 segundos
+Tempo de execução da CPU  4: 0.008932 segundos
+Tempo de execução real    5: 0.002418 segundos
+Tempo de execução da CPU  5: 0.001997 segundos
+Tempo de execução real    6: 0.003199 segundos
+Tempo de execução da CPU  6: 0.006236 segundos
+
+3. Testando escrita e leitura em disco
+Tempo de escrita 1: 0.110129 segundos | Taxa: 8.66 MB/s
+Tempo de leitura 1: 0.017131 segundos | Taxa: 55.67 MB/s
+Tempo de escrita 2: 0.008793 segundos | Taxa: 108.45 MB/s
+Tempo de leitura 2: 0.015918 segundos | Taxa: 59.91 MB/s
+Tempo de escrita 3: 0.008274 segundos | Taxa: 115.27 MB/s
+Tempo de leitura 3: 0.015073 segundos | Taxa: 63.27 MB/s
+Tempo de escrita 4: 0.008929 segundos | Taxa: 106.80 MB/s
+Tempo de leitura 4: 0.016546 segundos | Taxa: 57.64 MB/s
+Tempo de escrita 5: 0.008608 segundos | Taxa: 110.79 MB/s
+Tempo de leitura 5: 0.015908 segundos | Taxa: 59.95 MB/s
+Tempo de escrita 6: 0.009006 segundos | Taxa: 105.89 MB/s
+Tempo de leitura 6: 0.015728 segundos | Taxa: 60.64 MB/s
+
+
+------------------------------Testes concluídos------------------------------
+
+
+Resultados da CPU utilizando apenas 1 núcleo:
+----------------------------------------------------
+|Teste 0: Tempo real 0.005312s| Tempo CPU 0.005225s|
+|Teste 1: Tempo real 0.006423s| Tempo CPU 0.006352s|
+|Teste 2: Tempo real 0.005656s| Tempo CPU 0.005604s|
+|Teste 3: Tempo real 0.005338s| Tempo CPU 0.005289s|
+|Teste 4: Tempo real 0.011970s| Tempo CPU 0.011862s|
+|Teste 5: Tempo real 0.021101s| Tempo CPU 0.020914s|
+----------------------------------------------------
+
+Resultados da CPU utilizando todos os 8 threads:
+-----------------------------------------------------
+|Teste 0: Tempo real 0.003257s| Tempo CPU 0.010810s|
+|Teste 1: Tempo real 0.002578s| Tempo CPU 0.002159s|
+|Teste 2: Tempo real 0.002512s| Tempo CPU 0.003280s|
+|Teste 3: Tempo real 0.002587s| Tempo CPU 0.008932s|
+|Teste 4: Tempo real 0.002418s| Tempo CPU 0.001997s|
+|Teste 5: Tempo real 0.003199s| Tempo CPU 0.006236s|
+-----------------------------------------------------
+
+Resultados da escrita em disco:
+----------------------------------------
+|Tempo : 0.110129s| Taxa 8.659597MB/s|
+|Tempo : 0.008793s| Taxa 108.453323MB/s|
+|Tempo : 0.008274s| Taxa 115.267738MB/s|
+|Tempo : 0.008929s| Taxa 106.801038MB/s|
+|Tempo : 0.008608s| Taxa 110.786986MB/s|
+|Tempo : 0.009006s| Taxa 105.889620MB/s|
+----------------------------------------
+
+Resultados da leitura em disco:
+----------------------------------------
+|Tempo : 0.017131s| Taxa 55.669461MB/s|
+|Tempo : 0.015918s| Taxa 59.910157MB/s|
+|Tempo : 0.015073s| Taxa 63.269616MB/s|
+|Tempo : 0.016546s| Taxa 57.639467MB/s|
+|Tempo : 0.015908s| Taxa 59.947778MB/s|
+|Tempo : 0.015728s| Taxa 60.637344MB/s|
+----------------------------------------
+
+
+--------------------------Médias obtidas--------------------------
+| CPU 1 núcleo    | Real: 0.0093     s | CPU        0.0092     s   |
+| CPU multithread | Real: 0.0028     s | CPU        0.0056     s   |
+| DISCO escrita   | Tempo: 0.0256    s | Velocidade 92.64     MB/s |
+| DISCO leitura   | Tempo: 0.0161    s | Velocidade 59.51     MB/s |

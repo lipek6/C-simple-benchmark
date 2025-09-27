@@ -1,5 +1,6 @@
 #include <iostream>         // Padrão de usar em códigos de C++
 #include <vector>           // Para poder utilizar vetores
+#include <numeric>          // Facilitar somas dos vetores
 #include <chrono>           // Monitorar o tempo real de execução
 #include <ctime>            // Monitorar o tempo da CPU de execução
 #include <thread>           // Configurar o uso de múltiplos núcleos
@@ -7,33 +8,39 @@
 
 
 
-
 // Troque os valores dos macros à baixo para modificar algumas configurações dos testes
-#define VARIABLE_TEST_1         10000000000 // Somar +1 10 Bilhões de vezes
-#define VARIABLE_TEST_2         10000000000 // Somar +1 10 Bilhões de vezes
+#define VARIABLE_TEST_1         10000000000 // Somar +1 10 Bilhões de vezes em um único thread
+#define VARIABLE_TEST_2         10000000000   // Somar +1 625 Milhões de vezes em x threads (total de 1 Bilhão)
 #define VARIABLE_TEST_3         250000000   // 250 Milhões de ints para gravar em disco (1 GB)
 #define VARIABLE_TEST_4         250000000   // 250 Milhões de ints para ler do disco (1 GB)
+
+
+
+// Variáveis globais para testes em multithread
+volatile long long multithread_destiny = 0;
 
 
 
 
 // Declaração das funções que usaremos, você verá essas funções abaixo de main()
 void cpu_test1       (long double *real_time_spent, long double *cpu_time_spent);
+void cpu_test2       (long double *real_time_spent, long double *cpu_time_spent, int thread_count);
 void disk_write_test (long double *time_spent, long double *throughput);
-void disk_read_test (long double *time_spent, long double *throughput);
+void disk_read_test  (long double *time_spent, long double *throughput);
+void thread_function (long long *destiny, long long operations);
 
 
 
 
 int main (void)
 {
-    int tests = 1;        // Quantidade de testes que serão realizados (input sobrescreverá o 1)
-    int thread_count = 1; // Quantidade de threads que serão gerados (input sobrescreverá o 1)
+    int tests   = 1;                                    // Quantidade de testes que serão realizados (input sobrescreverá o 1)
+    int threads = std::thread::hardware_concurrency();  // Conta a quantidade de threads da máquina
 
-
+    
 
     printf("Iniciando processos de benchmark da sua máquina\n");
-    printf("Determine quantas vezes você gostaria de rodar os testes: ");
+    printf("Determine quantas vezes você gostaria de rodar os testes: \n");
     scanf("%i", &tests);
 
 
@@ -65,15 +72,16 @@ int main (void)
             printf("Tempo de execução real    %i: %Lf segundos\n", (i+1), real_time_singcore[i]);
             printf("Tempo de execução da CPU  %i: %Lf segundos\n", (i+1),  cpu_time_singcore[i]);
         }
+        printf("\n");
 
-
-        printf("2. Testando múltiplos núcleos\n");
+        printf("2. Testando múltiplos núcleos (%i núcleos lógicos da sua máquina)\n", threads);
         for(int i = 0; i < tests; i++)
         {
-            cpu_test2(&real_time_multcore[i], &cpu_time_multcore[i]);
+            cpu_test2(&real_time_multcore[i], &cpu_time_multcore[i], threads);
             printf("Tempo de execução real    %i: %Lf segundos\n", (i+1), real_time_multcore[i]);
             printf("Tempo de execução da CPU  %i: %Lf segundos\n", (i+1),  cpu_time_multcore[i]);
         }
+        printf("\n");
 
         printf("3. Testando escrita e leitura em disco\n");
         for(int i = 0; i < tests; i++)
@@ -84,6 +92,84 @@ int main (void)
             disk_read_test(&time_read[i], &rate_read[i]);
             printf("Tempo de leitura %i: %Lf segundos | Taxa: %.2Lf MB/s\n", (i+1), time_read[i], rate_read[i]);
         }
+        printf("\n");
+
+
+        printf("\n");
+        printf("------------------------------Testes concluídos------------------------------\n");
+        printf("\n");
+        printf("\n");
+
+
+        printf("Resultados da CPU utilizando apenas 1 núcleo:\n");
+        printf("----------------------------------------------------\n");
+        for (int i = 0; i < tests; i++)
+        {
+            printf("|Teste %i: Tempo real %Lfs| Tempo CPU %Lfs|\n", i, real_time_singcore[i], cpu_time_singcore[i]);
+        }
+        printf("----------------------------------------------------\n");
+        printf("\n");
+
+        printf("Resultados da CPU utilizando todos os %i threads:\n", threads);
+        printf("----------------------------------------------------\n");
+        for (int i = 0; i < tests; i++)
+        {
+            printf("|Teste %i: Tempo real %Lfs| Tempo CPU %Lfs|\n", i, real_time_multcore[i], cpu_time_multcore[i]);
+        }
+        printf("----------------------------------------------------\n");
+        printf("\n");
+
+        printf("Resultados da escrita em disco:\n");
+        printf("----------------------------------------\n");
+        for (int i = 0; i < tests; i++)
+        {
+            printf("|Tempo : %Lfs| Taxa %LfMB/s|\n", time_write[i], rate_write[i]);
+        }
+        printf("----------------------------------------\n");
+        printf("\n");
+
+        printf("Resultados da leitura em disco:\n");
+        printf("---------------------------------------\n");
+        for (int i = 0; i < tests; i++)
+        {
+            printf("|Tempo : %Lfs| Taxa %LfMB/s|\n", time_read[i], rate_read[i]);
+        }
+        printf("---------------------------------------\n");
+        printf("\n");
+
+        long double single_real_time_average;
+        single_real_time_average = std::accumulate(real_time_singcore.begin(), real_time_singcore.end(), 0.0L) / (long double) tests;
+
+        long double single_cpu_time_average;
+        single_cpu_time_average = std::accumulate(cpu_time_singcore.begin(), cpu_time_singcore.end(), 0.0L) / (long double) tests;
+
+        long double multi_real_time_average;
+        multi_real_time_average = std::accumulate(real_time_multcore.begin(), real_time_multcore.end(), 0.0L) / (long double) tests;
+
+        long double multi_cpu_time_average;
+        multi_cpu_time_average = std::accumulate(cpu_time_multcore.begin(), cpu_time_multcore.end(), 0.0L) / (long double) tests;
+
+        long double disk_write_time_average;
+        disk_write_time_average = std::accumulate(time_write.begin(), time_write.end(), 0.0L) / (long double) tests;
+
+        long double disk_write_rate_average;
+        disk_write_rate_average = std::accumulate(rate_write.begin(), rate_write.end(), 0.0L) / (long double) tests;
+
+        long double disk_read_time_average;
+        disk_read_time_average = std::accumulate(time_read.begin(), time_read.end(), 0.0L) / (long double) tests;
+
+        long double disk_read_rate_average;
+        disk_read_rate_average = std::accumulate(rate_read.begin(), rate_read.end(), 0.0L) / (long double) tests;
+        
+        printf("\n");
+        printf("--------------------------Médias obtidas--------------------------\n");
+
+        printf("| CPU 1 núcleo    | Real: %-10.4Lf s | CPU        %-10.4Lf s   |\n", single_real_time_average, single_cpu_time_average);
+        printf("| CPU multithread | Real: %-10.4Lf s | CPU        %-10.4Lf s   |\n", multi_real_time_average,  multi_cpu_time_average);
+        printf("| DISCO escrita   | Tempo: %-9.4Lf s | Velocidade %-9.2Lf MB/s |\n", disk_write_time_average,  disk_write_rate_average);
+        printf("| DISCO leitura   | Tempo: %-9.4Lf s | Velocidade %-9.2Lf MB/s |\n", disk_read_time_average,   disk_read_rate_average);
+
+        remove("teste.bin");
 }
 
 
@@ -111,6 +197,59 @@ void cpu_test1 (long double *real_time_spent, long double *cpu_time_spent)
 
     *real_time_spent = calc_real_time.count();
     *cpu_time_spent  = calc_cpu_time;
+}
+
+void cpu_test2 (long double *real_time_spent, long double *cpu_time_spent, int thread_count)
+{
+    using namespace std::chrono;
+
+    high_resolution_clock::time_point real_time_initial = high_resolution_clock::now();
+    clock_t cpu_time_initial = clock();
+        
+        std::vector<std::thread> threads;                               // Vetor de threads com a quantidade de threads da máquina
+        std::vector<long long> results(thread_count);                   // Vetor para armazeanar os resultados de cada uma das threads
+        long long total_sum = 0;                                        // Soma do resultado de cada uma das threads
+        long long work_per_thread = VARIABLE_TEST_2 / thread_count;     // Tamanho do trabalho que cada thread deve executar
+        
+
+        // Inicialização de threads para executarem a função thread_function
+        for (int i = 0; i < thread_count; ++i)
+        {
+            threads.emplace_back(thread_function, &results[i], work_per_thread);
+        }
+
+        
+        // Esperamos pela conclusão de todos os threads para reuni-los
+        for (auto &thread : threads)
+        {
+            thread.join();
+        }
+
+        //Soma do resultado de cada thread
+        for(long long val : results) 
+        {
+            total_sum += val;
+        }
+    
+    clock_t cpu_time_ending = clock();
+    high_resolution_clock::time_point real_time_ending = high_resolution_clock::now();
+
+
+    duration <long double> calc_real_time = duration_cast<duration<long double>>(real_time_ending - real_time_initial);
+    long double calc_cpu_time  = static_cast<double>(cpu_time_ending  - cpu_time_initial) / CLOCKS_PER_SEC;
+
+    *real_time_spent = calc_real_time.count();
+    *cpu_time_spent  = calc_cpu_time;
+}
+
+void thread_function (long long *destiny, long long operations)
+{
+    long long local_counter = 0;
+    for(long long i = 0; i < operations; i++) 
+    {
+        local_counter++;
+    }
+    *destiny = local_counter;
 }
 
 void disk_write_test (long double *time_spent, long double *throughput)
@@ -185,26 +324,4 @@ void disk_read_test (long double *time_spent, long double *throughput)
 
     fclose(arquivo);
     free(vetor);
-}
-
-void cpu_test2 (long double *real_time_spent, long double *cpu_time_spent)
-{
-    using namespace std::chrono;
-
-    high_resolution_clock::time_point real_time_initial = high_resolution_clock::now();
-    clock_t cpu_time_initial = clock();
-        volatile long long i = 0; 
-        while(i < VARIABLE_TEST_1)
-        {
-            i++;
-        }
-    clock_t cpu_time_ending = clock();
-    high_resolution_clock::time_point real_time_ending = high_resolution_clock::now();
-
-
-    duration <long double> calc_real_time = duration_cast<duration<long double>>(real_time_ending - real_time_initial);
-    long double calc_cpu_time  = static_cast<double>(cpu_time_ending  - cpu_time_initial) / CLOCKS_PER_SEC;
-
-    *real_time_spent = calc_real_time.count();
-    *cpu_time_spent  = calc_cpu_time;
 }
