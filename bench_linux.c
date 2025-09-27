@@ -66,12 +66,11 @@ int main (void)
 
 
 
-
 // Funções contendo testes de benchmark
 void cpu_test1 (double *time_spent)
 {
     //1. Teste de contínuos incrementos de 1
-    volatile long long i; // É volátil
+    volatile long long i = 0; // É volátil
     
     clock_t begin, end;
     
@@ -90,6 +89,7 @@ void cpu_test2 (double *time_spent, int thread_count)
 {
     pthread_t thread[MAX_AMOUNT_OF_THREADS];
 
+    clock_gettime(CLOCK_MONOTONIC, &start_time);
     clock_t begin, end;
     begin = clock();
 
