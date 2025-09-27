@@ -4,7 +4,7 @@
 #include <chrono>           // Monitorar o tempo real de execução
 #include <ctime>            // Monitorar o tempo da CPU de execução
 #include <thread>           // Configurar o uso de múltiplos núcleos
-
+#include <cmath>            // Para calcularmos o desvio padrão
 
 
 
@@ -29,7 +29,9 @@ void disk_write_test (long double *time_spent, long double *throughput);
 void disk_read_test  (long double *time_spent, long double *throughput);
 void thread_function (long long *destiny, long long operations);
 
-
+// Declaração de funções auxiliares
+long double deviation (const std::vector<long double>& vector, long double average, int n);
+long double average(const std::vector<long double>& vector) ;
 
 
 int main (void)
@@ -137,37 +139,52 @@ int main (void)
         printf("---------------------------------------\n");
         printf("\n");
 
-        long double single_real_time_average;
-        single_real_time_average = std::accumulate(real_time_singcore.begin(), real_time_singcore.end(), 0.0L) / (long double) tests;
 
-        long double single_cpu_time_average;
-        single_cpu_time_average = std::accumulate(cpu_time_singcore.begin(), cpu_time_singcore.end(), 0.0L) / (long double) tests;
+        long double single_real_time_average = average(real_time_singcore);
+        long double single_cpu_time_average  = average(cpu_time_singcore);
 
-        long double multi_real_time_average;
-        multi_real_time_average = std::accumulate(real_time_multcore.begin(), real_time_multcore.end(), 0.0L) / (long double) tests;
+        long double multi_real_time_average  = average(real_time_multcore);
+        long double multi_cpu_time_average   = average(cpu_time_multcore);
 
-        long double multi_cpu_time_average;
-        multi_cpu_time_average = std::accumulate(cpu_time_multcore.begin(), cpu_time_multcore.end(), 0.0L) / (long double) tests;
+        long double disk_write_time_average  = average(time_write);
+        long double disk_write_rate_average  = average(rate_write);
 
-        long double disk_write_time_average;
-        disk_write_time_average = std::accumulate(time_write.begin(), time_write.end(), 0.0L) / (long double) tests;
-
-        long double disk_write_rate_average;
-        disk_write_rate_average = std::accumulate(rate_write.begin(), rate_write.end(), 0.0L) / (long double) tests;
-
-        long double disk_read_time_average;
-        disk_read_time_average = std::accumulate(time_read.begin(), time_read.end(), 0.0L) / (long double) tests;
-
-        long double disk_read_rate_average;
-        disk_read_rate_average = std::accumulate(rate_read.begin(), rate_read.end(), 0.0L) / (long double) tests;
+        long double disk_read_time_average   = average(time_read);
+        long double disk_read_rate_average   = average(rate_read);      
+        
         
         printf("\n");
-        printf("--------------------------Médias obtidas--------------------------\n");
+        printf("---------------------------Médias obtidas---------------------------\n");
 
         printf("| CPU 1 núcleo    | Real: %-10.4Lf s | CPU        %-10.4Lf s   |\n", single_real_time_average, single_cpu_time_average);
         printf("| CPU multithread | Real: %-10.4Lf s | CPU        %-10.4Lf s   |\n", multi_real_time_average,  multi_cpu_time_average);
         printf("| DISCO escrita   | Tempo: %-9.4Lf s | Velocidade %-9.2Lf MB/s |\n", disk_write_time_average,  disk_write_rate_average);
         printf("| DISCO leitura   | Tempo: %-9.4Lf s | Velocidade %-9.2Lf MB/s |\n", disk_read_time_average,   disk_read_rate_average);
+
+        printf("--------------------------------------------------------------------\n");
+
+        
+        long double d_single_real = deviation(real_time_singcore, single_real_time_average, tests); 
+        long double d_single_cpu  = deviation(cpu_time_singcore, single_cpu_time_average, tests); 
+
+        long double d_multi_real = deviation(real_time_multcore, multi_real_time_average, tests); 
+        long double d_multi_cpu  = deviation(cpu_time_multcore, multi_cpu_time_average, tests); 
+
+        long double d_write_time = deviation(time_write, disk_write_time_average, tests); 
+        long double d_write_rate = deviation(rate_write, disk_write_rate_average, tests); 
+
+        long double d_read_time = deviation(time_read, disk_read_time_average, tests); 
+        long double d_read_rate = deviation(rate_read, disk_read_rate_average, tests); 
+
+
+        printf("\n");        
+        printf("--------------------------Desvios padrões---------------------------\n");
+
+        printf("| CPU 1 núcleo    | Real: %-10.4Lf s | CPU        %-10.4Lf s   |\n", d_single_real, d_single_cpu);
+        printf("| CPU multithread | Real: %-10.4Lf s | CPU        %-10.4Lf s   |\n", d_multi_real,  d_multi_cpu);
+        printf("| DISCO escrita   | Tempo: %-9.4Lf s | Velocidade %-9.2Lf MB/s |\n", d_write_time,  d_write_rate);
+        printf("| DISCO leitura   | Tempo: %-9.4Lf s | Velocidade %-9.2Lf MB/s |\n", d_read_time,   d_read_rate);
+        printf("--------------------------------------------------------------------\n");
 
         remove("teste.bin");
 }
@@ -324,4 +341,35 @@ void disk_read_test (long double *time_spent, long double *throughput)
 
     fclose(arquivo);
     free(vetor);
+}
+
+// Funções auxiliares para cácluos matemáticos repetitivos
+long double deviation (const std::vector<long double>& vector, long double average, int n)
+{
+    if (n < 2) 
+    {
+        return 0.0;
+    }
+
+    long double sums = 0.0;
+
+    for (const auto& value : vector)
+    {
+        long double difference = value - average;
+        sums += difference * difference;
+    }
+    long double result = std::sqrt(sums / n);
+    return result;
+}
+
+long double average(const std::vector<long double>& vector) 
+{
+    if (vector.empty())
+    {
+        return 0.0L;
+    }
+
+    long double sum = std::accumulate(vector.begin(), vector.end(), 0.0L);
+    
+    return sum / static_cast<long double>(vector.size());
 }
