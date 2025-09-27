@@ -31,7 +31,7 @@ void thread_function (long long *destiny, long long operations);
 
 // Declaração de funções auxiliares
 long double deviation (const std::vector<long double>& vector, long double average, int n);
-long double average(const std::vector<long double>& vector) ;
+long double average(const std::vector<long double>& vector);
 
 
 int main (void)
