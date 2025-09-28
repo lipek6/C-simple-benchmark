@@ -9,16 +9,15 @@
 
 
 // Troque os valores dos macros à baixo para modificar algumas configurações dos testes
-#define VARIABLE_TEST_1         10000000000 // Somar +1 10 Bilhões de vezes em um único thread
+#define VARIABLE_TEST_1         10000000000   // Somar +1 10 Bilhões de vezes em um único thread
 #define VARIABLE_TEST_2         10000000000   // Somar +1 625 Milhões de vezes em x threads (total de 1 Bilhão)
-#define VARIABLE_TEST_3         250000000   // 250 Milhões de ints para gravar em disco (1 GB)
-#define VARIABLE_TEST_4         250000000   // 250 Milhões de ints para ler do disco (1 GB)
+#define VARIABLE_TEST_3         250000000     // 250 Milhões de ints para gravar em disco (1 GB)
+#define VARIABLE_TEST_4         250000000     // 250 Milhões de ints para ler do disco (1 GB)
 
 
 
 // Variáveis globais para testes em multithread
 volatile long long multithread_destiny = 0;
-
 
 
 

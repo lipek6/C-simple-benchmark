@@ -1,0 +1,143 @@
+Iniciando processos de benchmark da sua máquina
+Determine quantas vezes você gostaria de rodar os testes: 
+Testando o CPU:
+1. Testando apenas 1 núcleo
+Tempo de execução real    1: 14.351275 segundos
+Tempo de execução da CPU  1: 14.349364 segundos
+Tempo de execução real    2: 5.211696 segundos
+Tempo de execução da CPU  2: 5.211262 segundos
+Tempo de execução real    3: 5.211328 segundos
+Tempo de execução da CPU  3: 5.210831 segundos
+Tempo de execução real    4: 5.235961 segundos
+Tempo de execução da CPU  4: 5.235445 segundos
+Tempo de execução real    5: 5.356098 segundos
+Tempo de execução da CPU  5: 5.355462 segundos
+Tempo de execução real    6: 5.342244 segundos
+Tempo de execução da CPU  6: 5.341525 segundos
+Tempo de execução real    7: 5.218567 segundos
+Tempo de execução da CPU  7: 5.218076 segundos
+Tempo de execução real    8: 5.211282 segundos
+Tempo de execução da CPU  8: 5.210809 segundos
+Tempo de execução real    9: 8.834189 segundos
+Tempo de execução da CPU  9: 8.833392 segundos
+Tempo de execução real    10: 8.554290 segundos
+Tempo de execução da CPU  10: 8.553391 segundos
+
+2. Testando múltiplos núcleos (8 núcleos lógicos da sua máquina)
+Tempo de execução real    1: 2.179407 segundos
+Tempo de execução da CPU  1: 14.876992 segundos
+Tempo de execução real    2: 2.274466 segundos
+Tempo de execução da CPU  2: 15.055916 segundos
+Tempo de execução real    3: 2.302405 segundos
+Tempo de execução da CPU  3: 15.579929 segundos
+Tempo de execução real    4: 2.271795 segundos
+Tempo de execução da CPU  4: 15.226330 segundos
+Tempo de execução real    5: 2.281321 segundos
+Tempo de execução da CPU  5: 14.925786 segundos
+Tempo de execução real    6: 2.251184 segundos
+Tempo de execução da CPU  6: 14.767455 segundos
+Tempo de execução real    7: 2.262244 segundos
+Tempo de execução da CPU  7: 15.874740 segundos
+Tempo de execução real    8: 2.293345 segundos
+Tempo de execução da CPU  8: 15.081191 segundos
+Tempo de execução real    9: 2.214523 segundos
+Tempo de execução da CPU  9: 14.731710 segundos
+Tempo de execução real    10: 2.280269 segundos
+Tempo de execução da CPU  10: 14.923870 segundos
+
+3. Testando escrita e leitura em disco
+Tempo de escrita 1: 1.812337 segundos | Taxa: 526.21 MB/s
+Tempo de leitura 1: 0.600950 segundos | Taxa: 1586.95 MB/s
+Tempo de escrita 2: 2.049196 segundos | Taxa: 465.39 MB/s
+Tempo de leitura 2: 0.590495 segundos | Taxa: 1615.04 MB/s
+Tempo de escrita 3: 2.046036 segundos | Taxa: 466.11 MB/s
+Tempo de leitura 3: 0.590965 segundos | Taxa: 1613.76 MB/s
+Tempo de escrita 4: 2.039361 segundos | Taxa: 467.63 MB/s
+Tempo de leitura 4: 0.590022 segundos | Taxa: 1616.34 MB/s
+Tempo de escrita 5: 2.046373 segundos | Taxa: 466.03 MB/s
+Tempo de leitura 5: 0.594134 segundos | Taxa: 1605.15 MB/s
+Tempo de escrita 6: 2.043067 segundos | Taxa: 466.79 MB/s
+Tempo de leitura 6: 0.591005 segundos | Taxa: 1613.65 MB/s
+Tempo de escrita 7: 2.046010 segundos | Taxa: 466.11 MB/s
+Tempo de leitura 7: 0.589889 segundos | Taxa: 1616.70 MB/s
+Tempo de escrita 8: 2.047037 segundos | Taxa: 465.88 MB/s
+Tempo de leitura 8: 0.591834 segundos | Taxa: 1611.39 MB/s
+Tempo de escrita 9: 2.038763 segundos | Taxa: 467.77 MB/s
+Tempo de leitura 9: 0.589151 segundos | Taxa: 1618.73 MB/s
+Tempo de escrita 10: 2.061103 segundos | Taxa: 462.70 MB/s
+Tempo de leitura 10: 0.592723 segundos | Taxa: 1608.97 MB/s
+
+
+------------------------------Testes concluídos------------------------------
+
+
+Resultados da CPU utilizando apenas 1 núcleo:
+----------------------------------------------------
+|Teste 0: Tempo real 14.351275s| Tempo CPU 14.349364s|
+|Teste 1: Tempo real 5.211696s| Tempo CPU 5.211262s|
+|Teste 2: Tempo real 5.211328s| Tempo CPU 5.210831s|
+|Teste 3: Tempo real 5.235961s| Tempo CPU 5.235445s|
+|Teste 4: Tempo real 5.356098s| Tempo CPU 5.355462s|
+|Teste 5: Tempo real 5.342244s| Tempo CPU 5.341525s|
+|Teste 6: Tempo real 5.218567s| Tempo CPU 5.218076s|
+|Teste 7: Tempo real 5.211282s| Tempo CPU 5.210809s|
+|Teste 8: Tempo real 8.834189s| Tempo CPU 8.833392s|
+|Teste 9: Tempo real 8.554290s| Tempo CPU 8.553391s|
+----------------------------------------------------
+
+Resultados da CPU utilizando todos os 8 threads:
+----------------------------------------------------
+|Teste 0: Tempo real 2.179407s| Tempo CPU 14.876992s|
+|Teste 1: Tempo real 2.274466s| Tempo CPU 15.055916s|
+|Teste 2: Tempo real 2.302405s| Tempo CPU 15.579929s|
+|Teste 3: Tempo real 2.271795s| Tempo CPU 15.226330s|
+|Teste 4: Tempo real 2.281321s| Tempo CPU 14.925786s|
+|Teste 5: Tempo real 2.251184s| Tempo CPU 14.767455s|
+|Teste 6: Tempo real 2.262244s| Tempo CPU 15.874740s|
+|Teste 7: Tempo real 2.293345s| Tempo CPU 15.081191s|
+|Teste 8: Tempo real 2.214523s| Tempo CPU 14.731710s|
+|Teste 9: Tempo real 2.280269s| Tempo CPU 14.923870s|
+----------------------------------------------------
+
+Resultados da escrita em disco:
+----------------------------------------
+|Tempo : 1.812337s| Taxa 526.212427MB/s|
+|Tempo : 2.049196s| Taxa 465.389579MB/s|
+|Tempo : 2.046036s| Taxa 466.108371MB/s|
+|Tempo : 2.039361s| Taxa 467.633805MB/s|
+|Tempo : 2.046373s| Taxa 466.031421MB/s|
+|Tempo : 2.043067s| Taxa 466.785674MB/s|
+|Tempo : 2.046010s| Taxa 466.114193MB/s|
+|Tempo : 2.047037s| Taxa 465.880281MB/s|
+|Tempo : 2.038763s| Taxa 467.771139MB/s|
+|Tempo : 2.061103s| Taxa 462.701047MB/s|
+----------------------------------------
+
+Resultados da leitura em disco:
+---------------------------------------
+|Tempo : 0.600950s| Taxa 1586.945696MB/s|
+|Tempo : 0.590495s| Taxa 1615.042564MB/s|
+|Tempo : 0.590965s| Taxa 1613.758637MB/s|
+|Tempo : 0.590022s| Taxa 1616.337041MB/s|
+|Tempo : 0.594134s| Taxa 1605.149145MB/s|
+|Tempo : 0.591005s| Taxa 1613.648449MB/s|
+|Tempo : 0.589889s| Taxa 1616.700686MB/s|
+|Tempo : 0.591834s| Taxa 1611.389505MB/s|
+|Tempo : 0.589151s| Taxa 1618.727458MB/s|
+|Tempo : 0.592723s| Taxa 1608.971948MB/s|
+---------------------------------------
+
+
+---------------------------Médias obtidas---------------------------
+| CPU 1 núcleo    | Real: 6.8527     s | CPU        6.8520     s   |
+| CPU multithread | Real: 2.2611     s | CPU        15.1044    s   |
+| DISCO escrita   | Tempo: 2.0229    s | Velocidade 472.06    MB/s |
+| DISCO leitura   | Tempo: 0.5921    s | Velocidade 1610.67   MB/s |
+--------------------------------------------------------------------
+
+--------------------------Desvios padrões---------------------------
+| CPU 1 núcleo    | Real: 2.8449     s | CPU        2.8445     s   |
+| CPU multithread | Real: 0.0357     s | CPU        0.3473     s   |
+| DISCO escrita   | Tempo: 0.0704    s | Velocidade 18.10     MB/s |
+| DISCO leitura   | Tempo: 0.0033    s | Velocidade 8.76      MB/s |
+--------------------------------------------------------------------
